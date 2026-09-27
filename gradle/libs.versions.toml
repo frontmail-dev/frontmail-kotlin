@@ -4,7 +4,7 @@ coroutines = "1.11.0"
 serialization = "1.11.0"
 junit = "5.13.4"
 maven-publish = "0.37.0"
-bcv = "0.18.1"
+bcv = "0.18.2"
 
 [libraries]
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }

@@ -157,16 +157,22 @@ public final class dev/frontmail/RetryPolicy$Companion {
 
 public final class dev/frontmail/SendOptions {
 	public fun <init> ()V
-	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ldev/frontmail/TurnstileKey;Ljava/util/List;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ldev/frontmail/TurnstileKey;Ljava/util/List;)V
 	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ldev/frontmail/TurnstileKey;Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ldev/frontmail/TurnstileKey;Ljava/util/List;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ldev/frontmail/TurnstileKey;Ljava/util/List;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun getAttachments ()Ljava/util/List;
 	public final fun getIdempotencyKey ()Ljava/lang/String;
+	public final fun getLocale ()Ljava/lang/String;
 	public final fun getTurnstileKey ()Ldev/frontmail/TurnstileKey;
 	public final fun getTurnstileToken ()Ljava/lang/String;
 }
 
 public final class dev/frontmail/SendResult {
-	public fun <init> (Ljava/lang/String;Ldev/frontmail/AcceptedStatus;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ldev/frontmail/AcceptedStatus;Ljava/lang/String;)V
+	public fun <init> (Ljava/lang/String;Ldev/frontmail/AcceptedStatus;Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ldev/frontmail/AcceptedStatus;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getLocale ()Ljava/lang/String;
 	public final fun getMessageId ()Ljava/lang/String;
 	public final fun getStatus ()Ldev/frontmail/AcceptedStatus;
 	public final fun getStatusToken ()Ljava/lang/String;

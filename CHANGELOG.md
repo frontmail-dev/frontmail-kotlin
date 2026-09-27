@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.2.0
+
+- `SendOptions(locale = "de")` picks a language variant of the template (BCP 47 tag; the API falls
+  back to the same base language, then to the template's default language). Sent as `locale`.
+- `SendResult.locale`: the language the email was rendered in (`null` if the API didn't return one).
+- Binary compatible with 0.1.x: the previous `SendOptions` and `SendResult` constructors remain in
+  the bytecode (hidden from Kotlin source).
+
 ## 0.1.0
 
 Initial release.

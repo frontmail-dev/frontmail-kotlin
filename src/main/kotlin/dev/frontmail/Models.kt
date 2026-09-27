@@ -73,7 +73,22 @@ public class SendOptions(
      */
     public val turnstileKey: TurnstileKey? = null,
     public val attachments: List<Attachment> = emptyList(),
-)
+    /**
+     * Preferred template language as a BCP 47 tag (`"de"`, `"pt-BR"`). The API picks the exact
+     * variant, then one with the same base language (`de-AT` → `de`), otherwise the template's
+     * default language – an unknown language is not an error. `null` sends the default language.
+     */
+    public val locale: String? = null,
+) {
+    /** Binary compatibility with 0.1.x (callers compiled before [locale] existed). */
+    @Deprecated("Kept for binary compatibility.", level = DeprecationLevel.HIDDEN)
+    public constructor(
+        idempotencyKey: String? = null,
+        turnstileToken: String? = null,
+        turnstileKey: TurnstileKey? = null,
+        attachments: List<Attachment> = emptyList(),
+    ) : this(idempotencyKey, turnstileToken, turnstileKey, attachments, null)
+}
 
 /** Status of an accepted message. */
 public enum class AcceptedStatus(public val value: String) {
@@ -98,8 +113,14 @@ public class SendResult(
     public val status: AcceptedStatus,
     /** Lets the app read the message status via [Frontmail.getStatus]. Treat it like a password. */
     public val statusToken: String,
+    /** Language the template was rendered in (the resolved [SendOptions.locale] or the default). */
+    public val locale: String? = null,
 ) {
-    override fun toString(): String = "SendResult(messageId=$messageId, status=$status)"
+    /** Binary compatibility with 0.1.x (callers compiled before [locale] existed). */
+    @Deprecated("Kept for binary compatibility.", level = DeprecationLevel.HIDDEN)
+    public constructor(messageId: String, status: AcceptedStatus, statusToken: String) : this(messageId, status, statusToken, null)
+
+    override fun toString(): String = "SendResult(messageId=$messageId, status=$status, locale=$locale)"
 }
 
 /** Delivery status of a message. */

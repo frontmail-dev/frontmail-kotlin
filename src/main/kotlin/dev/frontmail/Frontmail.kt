@@ -108,6 +108,7 @@ public class Frontmail internal constructor(
             put("template_params", params)
             options.turnstileToken?.let { put("turnstile_token", it) }
             options.turnstileKey?.let { put("turnstile_key", it.value) }
+            options.locale?.takeIf { it.isNotEmpty() }?.let { put("locale", it) }
             if (options.attachments.isNotEmpty()) {
                 put(
                     "attachments",
@@ -134,6 +135,7 @@ public class Frontmail internal constructor(
             messageId = messageId,
             status = AcceptedStatus.from(data.string("status") ?: ""),
             statusToken = data.string("status_token") ?: "",
+            locale = data.string("locale")?.takeIf { it.isNotEmpty() },
         )
     }
 

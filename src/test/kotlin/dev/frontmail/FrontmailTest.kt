@@ -123,6 +123,34 @@ class FrontmailTest {
     }
 
     @Test
+    fun `send passes locale and returns the resolved locale`() = runTest {
+        val t = FakeTransport(
+            ok("""{"message_id":"msg_1","status":"queued","status_token":"st_1","locale":"de"}"""),
+            ok(ACCEPTED),
+        )
+        val c = client(t)
+        val a = c.send("tpl_1", options = SendOptions(locale = "de-AT"))
+        val b = c.send("tpl_1", options = SendOptions(locale = ""))
+        assertEquals(JsonPrimitive("de-AT"), t.requests[0].json()["locale"])
+        assertFalse(t.requests[1].json().containsKey("locale"))
+        assertEquals("de", a.locale)
+        assertNull(b.locale)
+    }
+
+    @Test
+    fun `SendOptions and SendResult keep their 0_1 constructors`() {
+        // Hidden from Kotlin callers, but still in the bytecode for code compiled against 0.1.x.
+        val ctors = SendOptions::class.java.constructors.map { it.parameterTypes.toList() }
+        assertTrue(ctors.contains(listOf(String::class.java, String::class.java, TurnstileKey::class.java, List::class.java)))
+        // …including the synthetic defaults constructor used by `SendOptions(turnstileToken = …)`.
+        val names = SendOptions::class.java.declaredConstructors.map { c -> c.parameterTypes.joinToString(",") { it.simpleName } }
+        assertTrue(names.contains("String,String,TurnstileKey,List,int,DefaultConstructorMarker"), names.toString())
+        val results = SendResult::class.java.constructors.map { it.parameterTypes.toList() }
+        assertTrue(results.contains(listOf(String::class.java, AcceptedStatus::class.java, String::class.java)))
+        assertNull(SendOptions(turnstileToken = "t").locale)
+    }
+
+    @Test
     fun `converts nested params to JSON`() = runTest {
         val t = FakeTransport(ok(ACCEPTED))
         client(t).send(

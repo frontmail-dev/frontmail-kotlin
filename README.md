@@ -67,7 +67,19 @@ and `JsonElement`s (there's also an overload that takes a `JsonObject`). Anythin
 `IllegalArgumentException`.
 
 Options (`SendOptions`): `turnstileToken`, `turnstileKey`, `idempotencyKey` (default: a UUID per
-`send` call, reused by its retries) and `attachments`:
+`send` call, reused by its retries), `locale` and `attachments`.
+
+`SendOptions(locale = "de")` picks a language variant of the template (BCP 47 tag). The API falls back
+to the same base language (`de-AT` → `de`), then to the template's default language – an unknown
+language is not an error (`Locale.getDefault().toLanguageTag()` gives a valid tag).
+`SendResult.locale` is the language the email was rendered in.
+
+```kotlin
+val result = frontmail.send("tpl_contact", mapOf("name" to name), options = SendOptions(locale = "de"))
+println(result.locale) // "de"
+```
+
+Attachments:
 
 ```kotlin
 import dev.frontmail.Attachment
