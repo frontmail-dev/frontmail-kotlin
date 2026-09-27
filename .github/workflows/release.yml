@@ -1,0 +1,102 @@
+name: Build and release
+
+# Generated from the Frontmail monorepo (native-repo/kotlin) – edit it there, not here.
+#
+# Every push to main is a sync from the monorepo. `build` verifies the tree without secrets. When
+# gradle.properties carries a VERSION_NAME that is not on Maven Central yet, `publish` signs and
+# uploads it to the Central Portal (automatic release), then tags the commit and creates a GitHub
+# release. Pull requests only run `build`.
+#
+# Setup (README of the monorepo → Releasing native SDKs): environment `maven-central` (required
+# reviewers, main only) with secrets MAVEN_CENTRAL_USERNAME / MAVEN_CENTRAL_PASSWORD (Central
+# Portal user token) and SIGNING_KEY / SIGNING_KEY_PASSWORD (ASCII-armored GPG private key).
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build and test
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      publish: ${{ steps.version.outputs.publish }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
+        with:
+          distribution: temurin
+          java-version: '21'
+      # Fails on a tampered gradle-wrapper.jar before anything runs it.
+      - uses: gradle/actions/wrapper-validation@9c971963bec38e04b3d30dcc455b5382be2fdbfb # v6.3.0
+      - uses: gradle/actions/setup-gradle@9c971963bec38e04b3d30dcc455b5382be2fdbfb # v6.3.0
+      - name: Build, test, API check
+        run: ./gradlew build --no-daemon
+      - name: Version
+        id: version
+        run: |
+          version="$(sed -n 's/^VERSION_NAME=//p' gradle.properties | tr -d '[:space:]')"
+          [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$ ]] || { echo "::error::Bad VERSION_NAME '$version'"; exit 1; }
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          url="https://repo1.maven.org/maven2/dev/frontmail/frontmail/$version/frontmail-$version.pom"
+          if curl -fsIL "$url" >/dev/null; then
+            echo "::notice title=Release::dev.frontmail:frontmail:$version is already on Maven Central."
+            echo "publish=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "publish=true" >> "$GITHUB_OUTPUT"
+          fi
+
+  publish:
+    name: Publish to Maven Central
+    needs: build
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && needs.build.outputs.publish == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: maven-central
+    permissions:
+      contents: write # tag + GitHub release
+    env:
+      VERSION: ${{ needs.build.outputs.version }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: gradle/actions/wrapper-validation@9c971963bec38e04b3d30dcc455b5382be2fdbfb # v6.3.0
+      - uses: gradle/actions/setup-gradle@9c971963bec38e04b3d30dcc455b5382be2fdbfb # v6.3.0
+        with:
+          cache-read-only: true
+      - name: Publish (signed, automatic release)
+        env:
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_KEY }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_KEY_PASSWORD }}
+        run: |
+          for v in ORG_GRADLE_PROJECT_mavenCentralUsername ORG_GRADLE_PROJECT_mavenCentralPassword ORG_GRADLE_PROJECT_signingInMemoryKey; do
+            [ -n "${!v}" ] || { echo "::error::Secret for $v is not set in environment maven-central."; exit 1; }
+          done
+          ./gradlew publishToMavenCentral --no-daemon --no-configuration-cache
+      - name: Tag and GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          notes="$(awk -v v="## $VERSION" '$0==v{f=1;next} /^## /{f=0} f' CHANGELOG.md)"
+          gh release create "$VERSION" --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" \
+            --title "$VERSION" --notes "${notes:-dev.frontmail:frontmail:$VERSION}"

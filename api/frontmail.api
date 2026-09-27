@@ -1,0 +1,269 @@
+public final class dev/frontmail/AcceptedStatus : java/lang/Enum {
+	public static final field HELD Ldev/frontmail/AcceptedStatus;
+	public static final field QUEUED Ldev/frontmail/AcceptedStatus;
+	public static final field UNKNOWN Ldev/frontmail/AcceptedStatus;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public final fun getValue ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Ldev/frontmail/AcceptedStatus;
+	public static fun values ()[Ldev/frontmail/AcceptedStatus;
+}
+
+public abstract class dev/frontmail/Attachment {
+	public static final field Companion Ldev/frontmail/Attachment$Companion;
+}
+
+public final class dev/frontmail/Attachment$Companion {
+	public final fun fromBytes (Ljava/lang/String;Ljava/lang/String;[B)Ldev/frontmail/Attachment$Inline;
+}
+
+public final class dev/frontmail/Attachment$Inline : dev/frontmail/Attachment {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public final fun getContentBase64 ()Ljava/lang/String;
+	public final fun getContentType ()Ljava/lang/String;
+	public final fun getFilename ()Ljava/lang/String;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class dev/frontmail/Attachment$Upload : dev/frontmail/Attachment {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun getUploadId ()Ljava/lang/String;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class dev/frontmail/Frontmail {
+	public static final field CLIENT_NAME Ljava/lang/String;
+	public static final field Companion Ldev/frontmail/Frontmail$Companion;
+	public static final field DEFAULT_API_URL Ljava/lang/String;
+	public static final field DEFAULT_TIMEOUT_MILLIS J
+	public static final field STATUS_TOKEN_HEADER Ljava/lang/String;
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ldev/frontmail/RetryPolicy;J)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ldev/frontmail/RetryPolicy;JILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getApiUrl ()Ljava/lang/String;
+	public final fun getPublicKey ()Ljava/lang/String;
+	public final fun getRetry ()Ldev/frontmail/RetryPolicy;
+	public final fun getStatus (Ldev/frontmail/SendResult;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun getStatus (Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun getTimeoutMillis ()J
+	public final fun send (Ljava/lang/String;Ljava/util/Map;Ljava/lang/String;Ldev/frontmail/SendOptions;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun send (Ljava/lang/String;Lkotlinx/serialization/json/JsonObject;Ljava/lang/String;Ldev/frontmail/SendOptions;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun send$default (Ldev/frontmail/Frontmail;Ljava/lang/String;Ljava/util/Map;Ljava/lang/String;Ldev/frontmail/SendOptions;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static synthetic fun send$default (Ldev/frontmail/Frontmail;Ljava/lang/String;Lkotlinx/serialization/json/JsonObject;Ljava/lang/String;Ldev/frontmail/SendOptions;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+}
+
+public final class dev/frontmail/Frontmail$Companion {
+	public final fun publicConfig (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun publicConfig$default (Ldev/frontmail/Frontmail$Companion;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+}
+
+public final class dev/frontmail/FrontmailException : java/lang/Exception {
+	public static final field ABORTED Ljava/lang/String;
+	public static final field Companion Ldev/frontmail/FrontmailException$Companion;
+	public static final field DOCS_BASE_URL Ljava/lang/String;
+	public static final field INVALID_RESPONSE Ljava/lang/String;
+	public static final field NETWORK_ERROR Ljava/lang/String;
+	public static final field PRIVATE_KEY_IN_BROWSER Ljava/lang/String;
+	public static final field TIMEOUT Ljava/lang/String;
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Lkotlinx/serialization/json/JsonElement;Lkotlin/time/Duration;Ljava/lang/Throwable;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Lkotlinx/serialization/json/JsonElement;Lkotlin/time/Duration;Ljava/lang/Throwable;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getCode ()Ljava/lang/String;
+	public final fun getDetails ()Lkotlinx/serialization/json/JsonElement;
+	public final fun getDocsUrl ()Ljava/lang/String;
+	public final fun getReason ()Ljava/lang/String;
+	public final fun getRetryAfter-FghU774 ()Lkotlin/time/Duration;
+	public final fun getStatus ()Ljava/lang/Integer;
+	public final fun isAuth ()Z
+	public final fun isInsufficientCredits ()Z
+	public final fun isNetwork ()Z
+	public final fun isRateLimit ()Z
+	public final fun isValidation ()Z
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class dev/frontmail/FrontmailException$Companion {
+	public final fun docsUrlFor (Ljava/lang/String;)Ljava/lang/String;
+}
+
+public final class dev/frontmail/FrontmailVersion {
+	public static final field CURRENT Ljava/lang/String;
+	public static final field INSTANCE Ldev/frontmail/FrontmailVersion;
+}
+
+public final class dev/frontmail/MessageEvent {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Lkotlinx/serialization/json/JsonObject;)V
+	public final fun getAt ()Ljava/lang/String;
+	public final fun getRaw ()Lkotlinx/serialization/json/JsonObject;
+	public final fun getType ()Ljava/lang/String;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class dev/frontmail/MessageStatus : java/lang/Enum {
+	public static final field BOUNCED Ldev/frontmail/MessageStatus;
+	public static final field COMPLAINED Ldev/frontmail/MessageStatus;
+	public static final field DELIVERED Ldev/frontmail/MessageStatus;
+	public static final field DISCARDED Ldev/frontmail/MessageStatus;
+	public static final field FAILED Ldev/frontmail/MessageStatus;
+	public static final field HELD Ldev/frontmail/MessageStatus;
+	public static final field HELD_SERVICE_ERROR Ldev/frontmail/MessageStatus;
+	public static final field QUEUED Ldev/frontmail/MessageStatus;
+	public static final field SENDING Ldev/frontmail/MessageStatus;
+	public static final field SENT Ldev/frontmail/MessageStatus;
+	public static final field UNKNOWN Ldev/frontmail/MessageStatus;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public final fun getValue ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Ldev/frontmail/MessageStatus;
+	public static fun values ()[Ldev/frontmail/MessageStatus;
+}
+
+public final class dev/frontmail/MessageStatusResponse {
+	public fun <init> (Ljava/lang/String;Ldev/frontmail/MessageStatus;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lkotlinx/serialization/json/JsonObject;)V
+	public final fun getCreatedAt ()Ljava/lang/String;
+	public final fun getEvents ()Ljava/util/List;
+	public final fun getMessageId ()Ljava/lang/String;
+	public final fun getRaw ()Lkotlinx/serialization/json/JsonObject;
+	public final fun getSentAt ()Ljava/lang/String;
+	public final fun getServiceId ()Ljava/lang/String;
+	public final fun getStatus ()Ldev/frontmail/MessageStatus;
+	public final fun getTemplateId ()Ljava/lang/String;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class dev/frontmail/PublicConfig {
+	public fun <init> (Ldev/frontmail/PublicConfig$TurnstileConfig;)V
+	public final fun getTurnstile ()Ldev/frontmail/PublicConfig$TurnstileConfig;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class dev/frontmail/PublicConfig$TurnstileConfig {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public final fun getMobileBaseUrl ()Ljava/lang/String;
+	public final fun getMobileSiteKey ()Ljava/lang/String;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class dev/frontmail/RetryPolicy {
+	public static final field Companion Ldev/frontmail/RetryPolicy$Companion;
+	public fun <init> ()V
+	public fun <init> (IJJ)V
+	public synthetic fun <init> (IJJILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getBaseDelayMillis ()J
+	public final fun getMaxDelayMillis ()J
+	public final fun getRetries ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class dev/frontmail/RetryPolicy$Companion {
+	public final fun getNONE ()Ldev/frontmail/RetryPolicy;
+}
+
+public final class dev/frontmail/SendOptions {
+	public fun <init> ()V
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ldev/frontmail/TurnstileKey;Ljava/util/List;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ldev/frontmail/TurnstileKey;Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getAttachments ()Ljava/util/List;
+	public final fun getIdempotencyKey ()Ljava/lang/String;
+	public final fun getTurnstileKey ()Ldev/frontmail/TurnstileKey;
+	public final fun getTurnstileToken ()Ljava/lang/String;
+}
+
+public final class dev/frontmail/SendResult {
+	public fun <init> (Ljava/lang/String;Ldev/frontmail/AcceptedStatus;Ljava/lang/String;)V
+	public final fun getMessageId ()Ljava/lang/String;
+	public final fun getStatus ()Ldev/frontmail/AcceptedStatus;
+	public final fun getStatusToken ()Ljava/lang/String;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class dev/frontmail/Turnstile {
+	public static final field ANDROID_BRIDGE_NAME Ljava/lang/String;
+	public static final field INSTANCE Ldev/frontmail/Turnstile;
+	public static final field IOS_MESSAGE_HANDLER_NAME Ljava/lang/String;
+	public static final field MESSAGE_SOURCE Ljava/lang/String;
+	public static final field RESET_SCRIPT Ljava/lang/String;
+	public static final field TURNSTILE_ORIGIN Ljava/lang/String;
+	public final fun html (Ljava/lang/String;Ldev/frontmail/Turnstile$Theme;Ldev/frontmail/Turnstile$Size;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+	public static synthetic fun html$default (Ldev/frontmail/Turnstile;Ljava/lang/String;Ldev/frontmail/Turnstile$Theme;Ldev/frontmail/Turnstile$Size;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Ljava/lang/String;
+	public final fun isAllowedNavigation (Ljava/lang/String;Ljava/lang/String;Z)Z
+	public static synthetic fun isAllowedNavigation$default (Ldev/frontmail/Turnstile;Ljava/lang/String;Ljava/lang/String;ZILjava/lang/Object;)Z
+	public final fun navigationDecision (Ljava/lang/String;Ljava/lang/String;Z)Ldev/frontmail/Turnstile$NavigationDecision;
+	public static synthetic fun navigationDecision$default (Ldev/frontmail/Turnstile;Ljava/lang/String;Ljava/lang/String;ZILjava/lang/Object;)Ldev/frontmail/Turnstile$NavigationDecision;
+	public final fun originOf (Ljava/lang/String;)Ljava/lang/String;
+	public final fun parseMessage (Ljava/lang/String;)Ldev/frontmail/TurnstileMessage;
+	public final fun sharedWidget (Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun sharedWidget$default (Ldev/frontmail/Turnstile;Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+}
+
+public final class dev/frontmail/Turnstile$NavigationDecision : java/lang/Enum {
+	public static final field ALLOW Ldev/frontmail/Turnstile$NavigationDecision;
+	public static final field BLOCK Ldev/frontmail/Turnstile$NavigationDecision;
+	public static final field OPEN_EXTERNALLY Ldev/frontmail/Turnstile$NavigationDecision;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Ldev/frontmail/Turnstile$NavigationDecision;
+	public static fun values ()[Ldev/frontmail/Turnstile$NavigationDecision;
+}
+
+public final class dev/frontmail/Turnstile$Size : java/lang/Enum {
+	public static final field COMPACT Ldev/frontmail/Turnstile$Size;
+	public static final field FLEXIBLE Ldev/frontmail/Turnstile$Size;
+	public static final field NORMAL Ldev/frontmail/Turnstile$Size;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public final fun getValue ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Ldev/frontmail/Turnstile$Size;
+	public static fun values ()[Ldev/frontmail/Turnstile$Size;
+}
+
+public final class dev/frontmail/Turnstile$Theme : java/lang/Enum {
+	public static final field AUTO Ldev/frontmail/Turnstile$Theme;
+	public static final field DARK Ldev/frontmail/Turnstile$Theme;
+	public static final field LIGHT Ldev/frontmail/Turnstile$Theme;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public final fun getValue ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Ldev/frontmail/Turnstile$Theme;
+	public static fun values ()[Ldev/frontmail/Turnstile$Theme;
+}
+
+public final class dev/frontmail/TurnstileKey : java/lang/Enum {
+	public static final field FRONTMAIL Ldev/frontmail/TurnstileKey;
+	public static final field ORG Ldev/frontmail/TurnstileKey;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public final fun getValue ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Ldev/frontmail/TurnstileKey;
+	public static fun values ()[Ldev/frontmail/TurnstileKey;
+}
+
+public abstract class dev/frontmail/TurnstileMessage {
+}
+
+public final class dev/frontmail/TurnstileMessage$Error : dev/frontmail/TurnstileMessage {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun getCode ()Ljava/lang/String;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class dev/frontmail/TurnstileMessage$Expired : dev/frontmail/TurnstileMessage {
+	public static final field INSTANCE Ldev/frontmail/TurnstileMessage$Expired;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class dev/frontmail/TurnstileMessage$Token : dev/frontmail/TurnstileMessage {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun getToken ()Ljava/lang/String;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class dev/frontmail/TurnstileWidget {
+	public static final field Companion Ldev/frontmail/TurnstileWidget$Companion;
+	public final fun getBaseUrl ()Ljava/lang/String;
+	public final fun getOrigin ()Ljava/lang/String;
+	public final fun getSiteKey ()Ljava/lang/String;
+	public final fun getTurnstileKey ()Ldev/frontmail/TurnstileKey;
+	public final fun html (Ldev/frontmail/Turnstile$Theme;Ldev/frontmail/Turnstile$Size;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+	public static synthetic fun html$default (Ldev/frontmail/TurnstileWidget;Ldev/frontmail/Turnstile$Theme;Ldev/frontmail/Turnstile$Size;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Ljava/lang/String;
+	public final fun navigationDecision (Ljava/lang/String;Z)Ldev/frontmail/Turnstile$NavigationDecision;
+	public static synthetic fun navigationDecision$default (Ldev/frontmail/TurnstileWidget;Ljava/lang/String;ZILjava/lang/Object;)Ldev/frontmail/Turnstile$NavigationDecision;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class dev/frontmail/TurnstileWidget$Companion {
+	public final fun own (Ljava/lang/String;Ljava/lang/String;)Ldev/frontmail/TurnstileWidget;
+}
+
